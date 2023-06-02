@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Pagination } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
+import { Link } from "@chakra-ui/next-js";
 import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
@@ -42,14 +43,16 @@ export default function UsersList() {
             </Heading>
 
             <Button 
-              as='a'
+              as={Link}
               size='sm'
               fontSize='sm'
               colorScheme='pink'
               leftIcon={<Icon as={RiAddLine} fontSize='20' />}
+              href='/users/create'
             >
               Criar novo
             </Button>
+            
           </Flex>
 
           <Table colorScheme='whiteAlpha'>
