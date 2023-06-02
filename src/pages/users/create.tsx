@@ -21,7 +21,7 @@ export default function CreateUser() {
           flex='1'
           borderRadius={8}
           bg='gray.800'
-          p='8'
+          p={['6', '8']}
         >
           <Heading
             size='lg'
@@ -35,7 +35,7 @@ export default function CreateUser() {
           <VStack spacing='8'>
             <SimpleGrid 
               minChildWidth='240px' 
-              spacing='8' 
+              spacing={['6', '8']} 
               w='100%'
             >
               <Input
@@ -51,7 +51,7 @@ export default function CreateUser() {
 
             <SimpleGrid 
               minChildWidth='240px' 
-              spacing='8' 
+              spacing={['6', '8']} 
               w='100%'
             >
               <Input
