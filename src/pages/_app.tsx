@@ -3,6 +3,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { theme } from '@/styles/theme';
 import { SidebarDrawerProvider } from '@/contexts/SidebarDrawerContext';
 import { makeServer } from '@/services/mirage';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 export default function App({ Component, pageProps }: AppProps) {
 
@@ -10,11 +11,15 @@ export default function App({ Component, pageProps }: AppProps) {
     makeServer();
   }
 
+  const queryClient = new QueryClient();
+
   return (
-    <ChakraProvider theme={theme}>
-      <SidebarDrawerProvider>
-        <Component {...pageProps} />
-      </SidebarDrawerProvider>
-    </ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <ChakraProvider theme={theme}>
+        <SidebarDrawerProvider>
+          <Component {...pageProps} />
+        </SidebarDrawerProvider>
+      </ChakraProvider>
+    </QueryClientProvider>
   );
 }
