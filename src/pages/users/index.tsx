@@ -14,7 +14,7 @@ type User = {
 }
 
 export default function UsersList() {
-  const { data, isLoading, error } = useQuery('users', async () => {
+  const { data, isLoading, isFetching, error } = useQuery('users', async () => {
     const response = await fetch('http://localhost:3000/api/users');
     const data = await response.json();
 
@@ -68,6 +68,8 @@ export default function UsersList() {
               fontWeight='normal'
             >
               Usuários
+
+              { !isLoading && isFetching && <Spinner size='sm' color='gray.500' ml='4' />}
             </Heading>
 
             <Button 
