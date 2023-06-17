@@ -1,38 +1,15 @@
 import { Header } from "@/components/Header";
 import { Pagination } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
-import { api } from "@/services/api";
+import { User, useUsers } from "@/services/hooks/useUsers";
 import { Link } from "@chakra-ui/next-js";
 import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
-import { useQuery } from "react-query";
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  createdAt: string;
-}
+
 
 export default function UsersList() {
-  const { data, isLoading, isFetching, error } = useQuery('users', async () => {
-    const { data } = await api.get('users');
-
-    const users = data.users.map((user: User) => {
-      const { createdAt, ...rest } = user;
-
-      return {
-        createdAt: new Date(createdAt).toLocaleDateString('pt-BR', {
-          day: '2-digit',
-          month: 'long',
-          year: 'numeric'
-        }),
-        ...rest
-      };
-    });
-
-    return users;
-  });
+  const { data, isLoading, isFetching, error } = useUsers();
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -111,7 +88,7 @@ export default function UsersList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  { data.map((user: User) => (
+                  { data && data.map((user) => (
                     <Tr key={user.id}>
                       <Td px={['4', '4', '6']}>
                         <Checkbox colorScheme='pink' />
