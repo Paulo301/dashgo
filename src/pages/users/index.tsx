@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Pagination } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
+import { api } from "@/services/api";
 import { Link } from "@chakra-ui/next-js";
 import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
@@ -15,8 +16,7 @@ type User = {
 
 export default function UsersList() {
   const { data, isLoading, isFetching, error } = useQuery('users', async () => {
-    const response = await fetch('http://localhost:3000/api/users');
-    const data = await response.json();
+    const { data } = await api.get('users');
 
     const users = data.users.map((user: User) => {
       const { createdAt, ...rest } = user;
