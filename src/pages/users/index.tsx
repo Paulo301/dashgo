@@ -1,9 +1,11 @@
 import { Header } from "@/components/Header";
 import { Pagination } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
+import { api } from "@/services/api";
 import { User, useUsers } from "@/services/hooks/useUsers";
+import { queryClient } from "@/services/queryClient";
 import { Link } from "@chakra-ui/next-js";
-import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
+import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, Link as ChakraLink } from "@chakra-ui/react";
 import { useState } from "react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
@@ -17,6 +19,16 @@ export default function UsersList() {
     base: false,
     lg: true,
   });
+
+  async function handlePrefetchUser(userId: number) {
+    await queryClient.prefetchQuery(['user', userId], async () => {
+      const response = await api.get(`users/${userId}`);
+
+      return response.data;
+    }, {
+      staleTime: 1000 * 60 * 10 //min
+    });
+  }
 
   return (
     <Box>
@@ -97,7 +109,9 @@ export default function UsersList() {
                       </Td>
                       <Td>
                         <Box>
-                          <Text fontWeight='bold'>{user.name}</Text>
+                          <ChakraLink color='purple.400' onMouseEnter={() => handlePrefetchUser(user.id)}>
+                            <Text fontWeight='bold'>{user.name}</Text>
+                          </ChakraLink>
                           <Text fontSize='sm'>{user.email}</Text>
                         </Box>
                       </Td>
