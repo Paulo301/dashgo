@@ -2,18 +2,26 @@ import { Header } from "@/components/Header";
 import { Pagination } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/services/api";
-import { User, useUsers } from "@/services/hooks/useUsers";
+import { getUsers, User, useUsers } from "@/services/hooks/useUsers";
 import { queryClient } from "@/services/queryClient";
 import { Link } from "@chakra-ui/next-js";
 import { Box, Button, Checkbox, Flex, Heading, Icon, Spinner, Table, Tbody, Td, Text, Th, Thead, Tr, useBreakpointValue, Link as ChakraLink } from "@chakra-ui/react";
+import { GetServerSideProps } from "next";
 import { useState } from "react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 
+interface UserListProps {
+  data: {
+    users: User[];
+    totalCount: number;
+  }
+}
 
-
-export default function UsersList() {
+export default function UsersList({ data: initialData }: UserListProps) {
   const [page, setPage] = useState(1);
-  const { data, isLoading, isFetching, error } = useUsers(page);
+  const { data, isLoading, isFetching, error } = useUsers(page, {
+    initialData: initialData
+  });
 
   const isWideVersion = useBreakpointValue({
     base: false,
@@ -144,4 +152,17 @@ export default function UsersList() {
       </Flex>
     </Box>
   );
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { users, totalCount } = await getUsers(1);
+
+  return  {
+    props: {
+      data: {
+        users,
+        totalCount
+      }
+    }
+  }
 }
